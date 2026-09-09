@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>mio App</title>
+  <title>Tio App</title>
   <link rel="manifest" href="manifest.json">
-  <link id="favicon" rel="icon" type="image/png" href="">
+  <link rel="icon" href="icon.png">
   <style>
     body {
       font-family: sans-serif;
@@ -27,6 +27,12 @@
       max-width: 360px;
       width: 90%;
     }
+    .app-icon {
+      width: 140px;
+      height: 140px;
+      border-radius: 1.5rem;
+      object-fit: cover;
+    }
     button {
       background: #88c13f;
       color: white;
@@ -37,68 +43,18 @@
       font-size: 1rem;
       font-weight: bold;
       margin-top: 1.5rem;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #76a935;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <!-- 「mio」ロゴアイコンを描画するCanvas -->
-    <canvas id="iconCanvas" width="512" height="512" style="width:160px; height:160px;"></canvas>
-    <h1 style="color:#2b6cb0; margin-top: 1rem;">mio</h1>
+    <img src="icon.png" class="app-icon" alt="Tio Icon">
+    <h1 style="color:#2b6cb0; margin-top: 1rem;">Tio</h1>
     <p id="status">通信待機中...</p>
     <button onclick="sendData()">GASへデータ送信</button>
   </div>
 
   <script>
-    // 1. 画像デザイン「mio」をCanvas上にSVGパスで忠実再現
-    function drawMioIcon() {
-      const canvas = document.getElementById('iconCanvas');
-      const ctx = canvas.getContext('2d');
-
-      // SVGデータをDataURLとして画像ロードしCanvasに描画
-      const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <rect width="512" height="512" rx="100" fill="#ffffff"/>
-        
-        <!-- 青い円 (o) -->
-        <circle cx="360" cy="300" r="100" fill="none" stroke="#2563eb" stroke-width="36" stroke-dasharray="6,6" />
-        
-        <!-- 緑のリボン/芽 (mの左側〜右へ伸びるライン) -->
-        <path d="M 40 280 C 70 180, 130 150, 160 280 L 160 380 M 135 185 C 190 120, 270 170, 310 230 C 350 280, 430 220, 480 180" 
-              fill="none" stroke="#88c13f" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" />
-        
-        <!-- オレンジの i -->
-        <circle cx="230" cy="245" r="18" fill="#f59e0b" />
-        <rect x="212" y="280" width="36" height="100" rx="18" fill="#f59e0b" />
-        
-        <!-- 青い花 (右上) -->
-        <g transform="translate(420, 140) scale(0.7)">
-          <circle cx="0" cy="-22" r="14" fill="#3b82f6" />
-          <circle cx="21" cy="-7" r="14" fill="#3b82f6" />
-          <circle cx="13" cy="18" r="14" fill="#3b82f6" />
-          <circle cx="-13" cy="18" r="14" fill="#3b82f6" />
-          <circle cx="-21" cy="-7" r="14" fill="#3b82f6" />
-          <circle cx="0" cy="0" r="8" fill="#fef08a" />
-        </g>
-      </svg>`;
-
-      const img = new Image();
-      const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
-      const url = URL.createObjectURL(svgBlob);
-
-      img.onload = function () {
-        ctx.drawImage(img, 0, 0);
-        URL.revokeObjectURL(url);
-        // Favicon(タブアイコン)にも反映
-        document.getElementById('favicon').href = canvas.toDataURL('image/png');
-      };
-      img.src = url;
-    }
-
-    // 2. GASとの通信処理
     const GAS_URL = "https://script.google.com/macros/s/AKfycbzEMXwBoAPuuPBETQcsGC7CqVYbZnFbWSWN2VJzpuYlhMUoljmRpaOyFhqQIyO4WH4BhQ/exec";
 
     async function sendData() {
@@ -114,8 +70,6 @@
         document.getElementById('status').innerText = "エラーが発生しました";
       }
     }
-
-    window.addEventListener('DOMContentLoaded', drawMioIcon);
   </script>
 </body>
 </html>
