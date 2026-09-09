@@ -1,15 +1,15 @@
 {
-  "name": "mio Application",
-  "short_name": "mio",
+  "name": "Tio Application",
+  "short_name": "Tio",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23ffffff'/><circle cx='360' cy='300' r='100' fill='none' stroke='%232563eb' stroke-width='36' stroke-dasharray='6,6'/><path d='M 40 280 C 70 180, 130 150, 160 280 L 160 380 M 135 185 C 190 120, 270 170, 310 230 C 350 280, 430 220, 480 180' fill='none' stroke='%2388c13f' stroke-width='38' stroke-linecap='round'/><circle cx='230' cy='245' r='18' fill='%23f59e0b'/><rect x='212' y='280' width='36' height='100' rx='18' fill='%23f59e0b'/></svg>",
+      "src": "icon.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]
