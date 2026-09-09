@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISS App</title>
+  <link rel="manifest" href="manifest.json">
+  <link id="favicon" rel="icon" type="image/png" href="">
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #0f172a;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- 動的にアイコンが描画されるCanvas -->
+    <canvas id="iconCanvas" width="512" height="512" style="width:128px; height:128px;"></canvas>
+    <h1>SISS アプリ</h1>
+    <p id="status">通信待機中...</p>
+    <button onclick="sendData()">GASへデータ送信</button>
+  </div>
+
+  <script>
+    // 1. icon.png (Canvas) の動的描画処理
+    function generateIcon() {
+      const canvas = document.getElementById('iconCanvas');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // 背景
+      const bgGrad = ctx.createLinearGradient(0, 0, w, h);
+      bgGrad.addColorStop(0, '#1e293b');
+      bgGrad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = bgGrad;
+      ctx.beginPath();
+      ctx.roundRect(16, 16, w - 32, h - 32, 108);
+      ctx.fill();
+
+      // アイコンパスグラデーション
+      const strokeGrad = ctx.createLinearGradient(100, 100, 400, 400);
+      strokeGrad.addColorStop(0, '#38bdf8');
+      strokeGrad.addColorStop(1, '#2563eb');
+
+      // 円枠
+      ctx.beginPath();
+      ctx.arc(256, 256, 158, 0, Math.PI * 2);
+      ctx.strokeStyle = strokeGrad;
+      ctx.lineWidth = 6;
+      ctx.globalAlpha = 0.6;
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+
+      // S字シンボル
+      ctx.beginPath();
+      ctx.lineWidth = 36;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = strokeGrad;
+      ctx.moveTo(256, 128);
+      ctx.bezierCurveTo(320, 128, 360, 160, 360, 208);
+      ctx.bezierCurveTo(360, 272, 256, 272, 256, 312);
+      ctx.bezierCurveTo(256, 332, 276, 344, 304, 344);
+      ctx.moveTo(256, 384);
+      ctx.bezierCurveTo(192, 384, 152, 352, 152, 304);
+      ctx.bezierCurveTo(152, 240, 256, 240, 256, 200);
+      ctx.bezierCurveTo(256, 180, 236, 168, 208, 168);
+      ctx.stroke();
+
+      // Faviconへ動的セット
+      const iconUrl = canvas.toDataURL('image/png');
+      document.getElementById('favicon').href = iconUrl;
+    }
+
+    // 2. GASとの通信処理
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzEMXwBoAPuuPBETQcsGC7CqVYbZnFbWSWN2VJzpuYlhMUoljmRpaOyFhqQIyO4WH4BhQ/exec";
+
+    async function sendData() {
+      document.getElementById('status').innerText = "送信中...";
+      try {
+        const response = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: "button_click", timestamp: new Date() })
+        });
+        const result = await response.json();
+        document.getElementById('status').innerText = "送信成功!";
+      } catch (error) {
+        document.getElementById('status').innerText = "エラーが発生しました";
+      }
+    }
+
+    // 初期化実行
+    window.addEventListener('DOMContentLoaded', generateIcon);
+  </script>
+</body>
+</html>
